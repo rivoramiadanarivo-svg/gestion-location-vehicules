@@ -28,12 +28,7 @@ pipeline {
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
-                }
-            }
-            post {
-                always {
-                     junit 'target/surefire-reports/*.xml'
-                     archiveArtifacts artifacts: 'target/site/jacoco/**', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'target/site/jacoco/**', allowEmptyArchive: true
                 }
             }
         }
@@ -49,7 +44,7 @@ pipeline {
         }
         stage('Run (simulation de déploiement)') {
             steps {
-                bat 'java -jar target\\gestion-location-vehicules-1.0.0.jar'
+                bat 'echo 0| java -jar target\\gestion-location-vehicules-1.0.0.jar'
             }
         }
     }
