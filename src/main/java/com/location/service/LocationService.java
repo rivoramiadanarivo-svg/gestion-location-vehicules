@@ -1,6 +1,9 @@
 package com.location.service;
 
 import com.location.model.Vehicule;
+import com.location.model.Client;
+import com.location.model.Location;
+import java.time.LocalDate;
 
 public class LocationService {
 
@@ -27,5 +30,20 @@ public class LocationService {
         v.setDisponible(true);
     }
 
+
+    public Location creerLocation(Client client, Vehicule v, LocalDate debut, LocalDate fin) {
+        Location location = new Location(client, v, debut, fin); // valide les dates d'abord
+        louer(v);                                                // puis réserve le véhicule
+        return location;
+    }
+
+    public double calculerPrix(Location location) {
+        return calculerPrix(location.getVehicule(), location.getNbJours());
+    }
+
+    public void terminer(Location location) {
+        retourner(location.getVehicule());
+        location.terminer();
+    }
 
 }
