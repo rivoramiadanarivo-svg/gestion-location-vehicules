@@ -16,4 +16,18 @@ class ClientTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new Client("C1", " ", "Jean", "0340000000"));
     }
+    @Test
+    void prenomVideLeveException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Client("C1", "Rakoto", " ", "0340000000"));
+    }
+
+    @Test
+    void gettersRetournentLesValeurs() {
+        Client c = new Client("C1", "Rakoto", "Jean", "0340000000");
+        assertEquals("C1", c.getId());
+        assertEquals("Rakoto", c.getNom());
+        assertEquals("Jean", c.getPrenom());
+        assertEquals("0340000000", c.getTelephone());
+    }
 }

@@ -81,4 +81,24 @@ class ApplicationTest {
     void finDeSaisieSansQuitterNePlantePas() {
         assertDoesNotThrow(() -> executer(""));
     }
+
+    @Test
+    void vehiculeIntrouvableAfficheUnMessage() {
+        String saisies = String.join("\n",
+                "2", "Rakoto", "Jean", "0340000000", "ZZ-999", "0") + "\n";
+        assertTrue(executer(saisies).contains("Véhicule introuvable."));
+    }
+
+    @Test
+    void listeDesLocationsApresCreation() {
+        String saisies = String.join("\n",
+                "2", "Rakoto", "Jean", "0340000000", "AB-123-CD",
+                "2026-12-01", "2026-12-04", "4", "0") + "\n";
+        assertTrue(executer(saisies).contains("(en cours)"));
+    }
+
+    @Test
+    void terminerSansLocationAfficheUnMessage() {
+        assertTrue(executer("3\n0\n").contains("Aucune location en cours."));
+    }
 }

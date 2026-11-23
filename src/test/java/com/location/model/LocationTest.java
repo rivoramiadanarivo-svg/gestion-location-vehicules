@@ -34,4 +34,27 @@ class LocationTest {
                 LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
         assertEquals(0, l.getJoursDeRetard());
     }
+
+    @Test
+    void clientOuVehiculeNullLeveException() {
+        assertThrows(IllegalArgumentException.class, () -> new Location(null, vehicule,
+                LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4)));
+        assertThrows(IllegalArgumentException.class, () -> new Location(client, null,
+                LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4)));
+    }
+
+    @Test
+    void datesNullLeventException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Location(client, vehicule, null, LocalDate.of(2026, 12, 4)));
+    }
+
+    @Test
+    void dateRetourEffectiveEstEnregistree() {
+        Location l = new Location(client, vehicule,
+                LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
+        l.terminer(LocalDate.of(2026, 12, 5));
+        assertEquals(LocalDate.of(2026, 12, 5), l.getDateRetourEffective());
+        assertEquals(1, l.getJoursDeRetard());
+    }
 }
