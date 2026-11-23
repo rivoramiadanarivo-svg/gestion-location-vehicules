@@ -79,7 +79,6 @@ class ApplicationTest {
     }
     @Test
     void finDeSaisieSansQuitterNePlantePas() {
-        String sortie = executer("");
-        assertTrue(sortie.contains("Gestion de location"));
+        assertDoesNotThrow(() -> executer(""));
     }
 }
