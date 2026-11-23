@@ -77,4 +77,9 @@ class ApplicationTest {
         assertTrue(sortie.contains("Jours de retard : 2"));
         assertTrue(sortie.contains("Total à payer : 480.0"));
     }
+    @Test
+    void finDeSaisieSansQuitterNePlantePas() {
+        String sortie = executer("");
+        assertTrue(sortie.contains("Gestion de location"));
+    }
 }
