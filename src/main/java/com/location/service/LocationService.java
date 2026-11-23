@@ -24,6 +24,6 @@ public class LocationService {
     }
 
     public void retourner(Vehicule v) {
-        v.setDisponible(true)
+        v.setDisponible(true);
     }
 }
