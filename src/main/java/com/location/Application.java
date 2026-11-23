@@ -32,7 +32,7 @@ public class Application {
 
     public void demarrer() {
         boolean continuer = true;
-        while (continuer) {
+        while (continuer && scanner.hasNextLine()) {
             afficherMenu();
             String choix = scanner.nextLine().trim();
             switch (choix) {
