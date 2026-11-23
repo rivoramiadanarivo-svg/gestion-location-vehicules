@@ -30,6 +30,12 @@ pipeline {
                     junit 'target/surefire-reports/*.xml'
                 }
             }
+            post {
+                always {
+                     junit 'target/surefire-reports/*.xml'
+                     archiveArtifacts artifacts: 'target/site/jacoco/**', allowEmptyArchive: true
+                }
+            }
         }
         stage('Package') {
             steps {
