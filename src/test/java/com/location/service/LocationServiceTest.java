@@ -27,4 +27,18 @@ class LocationServiceTest {
         service.louer(v);
         assertThrows(IllegalStateException.class, () -> service.louer(v));
     }
+
+    @Test
+    void retournerRendLeVehiculeDisponible() {
+        Vehicule v = new Vehicule("A", "Clio", 50);
+        service.louer(v);
+        service.retourner(v);
+        assertTrue(v.isDisponible());
+    }
+
+    @Test
+    void nombreDeJoursInvalideLeveException() {
+        Vehicule v = new Vehicule("A", "Clio", 50);
+        assertThrows(IllegalArgumentException.class, () -> service.calculerPrix(v, 0));
+    }
 }
