@@ -10,7 +10,8 @@ public class LocationService {
         }
         double total = v.getPrixParJour() * nbJours;
         if (nbJours >= 7) {
-            total *= 0.9; // remise de 10 % à partir de 7 jours
+            // total *= 0.9; // remise de 10 % à partir de 7 jours
+            total *= 0.5;
         }
         return total;
     }
