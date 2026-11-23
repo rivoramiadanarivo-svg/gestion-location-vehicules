@@ -27,5 +27,9 @@ public class Main {
         System.out.println("Véhicule : " + choisi.getMarque());
         System.out.println("Prix total : " + service.calculerPrix(l));
         System.out.println("Véhicules disponibles après location : " + flotte.disponibles().size());
+        service.terminer(l, LocalDate.of(2026, 12, 6));
+        System.out.println("Jours de retard : " + l.getJoursDeRetard());
+        System.out.println("Pénalité : " + service.calculerPenalite(l));
+        System.out.println("Total à payer : " + service.calculerTotal(l));
     }
 }

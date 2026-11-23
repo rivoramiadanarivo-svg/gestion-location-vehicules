@@ -66,7 +66,7 @@ class LocationServiceTest {
     void terminerLocationRendLeVehiculeDisponible() {
         Vehicule v = new Vehicule("A", "Clio", 50);
         Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
-        service.terminer(l);
+        service.terminer(l, LocalDate.of(2026, 12, 4));
         assertTrue(v.isDisponible());
         assertTrue(l.isTerminee());
     }
@@ -76,5 +76,46 @@ class LocationServiceTest {
         Vehicule v = new Vehicule("A", "Clio", 100);
         Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 8));
         assertEquals(630, service.calculerPrix(l), 0.01);
+    }
+
+    @Test
+    void retourALHeureSansPenalite() {
+        Vehicule v = new Vehicule("A", "Clio", 100);
+        Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
+        service.terminer(l, LocalDate.of(2026, 12, 4));
+        assertEquals(0, service.calculerPenalite(l), 0.01);
+    }
+
+    @Test
+    void retourAvecDeuxJoursDeRetard() {
+        Vehicule v = new Vehicule("A", "Clio", 100);
+        Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
+        service.terminer(l, LocalDate.of(2026, 12, 6));
+        assertEquals(2, l.getJoursDeRetard());
+        assertEquals(300, service.calculerPenalite(l), 0.01);   // 2 x 100 x 1,5
+    }
+
+    @Test
+    void totalIncluantPrixEtPenalite() {
+        Vehicule v = new Vehicule("A", "Clio", 100);
+        Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
+        service.terminer(l, LocalDate.of(2026, 12, 5));
+        assertEquals(450, service.calculerTotal(l), 0.01);      // 300 + 150
+    }
+
+    @Test
+    void retourAnticipeNeChangePasLePrix() {
+        Vehicule v = new Vehicule("A", "Clio", 100);
+        Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
+        service.terminer(l, LocalDate.of(2026, 12, 2));
+        assertEquals(300, service.calculerTotal(l), 0.01);
+    }
+
+    @Test
+    void retourAvantLeDebutLeveException() {
+        Vehicule v = new Vehicule("A", "Clio", 100);
+        Location l = service.creerLocation(client, v, LocalDate.of(2026, 12, 10), LocalDate.of(2026, 12, 14));
+        assertThrows(IllegalArgumentException.class,
+                () -> service.terminer(l, LocalDate.of(2026, 12, 5)));
     }
 }

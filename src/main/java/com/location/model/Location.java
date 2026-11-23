@@ -10,6 +10,8 @@ public class Location {
     private final LocalDate dateFin;
     private boolean terminee = false;
 
+    private LocalDate dateRetourEffective;
+
     public Location(Client client, Vehicule vehicule, LocalDate dateDebut, LocalDate dateFin) {
         if (client == null || vehicule == null) {
             throw new IllegalArgumentException("Client et véhicule obligatoires");
@@ -30,7 +32,26 @@ public class Location {
         return (int) ChronoUnit.DAYS.between(dateDebut, dateFin);
     }
 
-    public void terminer() { this.terminee = true; }
+    //public void terminer() { this.terminee = true; }
+    public void terminer(LocalDate dateRetour) {
+        if (dateRetour == null) {
+            throw new IllegalArgumentException("Date de retour obligatoire");
+        }
+        if (dateRetour.isBefore(dateDebut)) {
+            throw new IllegalArgumentException("Retour avant le début de la location");
+        }
+        this.dateRetourEffective = dateRetour;
+        this.terminee = true;
+    }
+
+    public int getJoursDeRetard() {
+        if (dateRetourEffective == null || !dateRetourEffective.isAfter(dateFin)) {
+            return 0;
+        }
+        return (int) ChronoUnit.DAYS.between(dateFin, dateRetourEffective);
+    }
+
+    public LocalDate getDateRetourEffective() { return dateRetourEffective; }
 
     public Client getClient() { return client; }
     public Vehicule getVehicule() { return vehicule; }

@@ -41,9 +41,21 @@ public class LocationService {
         return calculerPrix(location.getVehicule(), location.getNbJours());
     }
 
-    public void terminer(Location location) {
+    public static final double TAUX_PENALITE = 1.5;
+
+    public void terminer(Location location, LocalDate dateRetour) {
+        location.terminer(dateRetour);
         retourner(location.getVehicule());
-        location.terminer();
+    }
+
+    public double calculerPenalite(Location location) {
+        return location.getJoursDeRetard()
+                * location.getVehicule().getPrixParJour()
+                * TAUX_PENALITE;
+    }
+
+    public double calculerTotal(Location location) {
+        return calculerPrix(location) + calculerPenalite(location);
     }
 
 }

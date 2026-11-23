@@ -27,4 +27,11 @@ class LocationTest {
         assertThrows(IllegalArgumentException.class, () -> new Location(client, vehicule,
                 LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 1)));
     }
+
+    @Test
+    void joursDeRetardEstZeroTantQueLaLocationNEstPasTerminee() {
+        Location l = new Location(client, vehicule,
+                LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 4));
+        assertEquals(0, l.getJoursDeRetard());
+    }
 }
