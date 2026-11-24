@@ -37,12 +37,12 @@ pipeline {
         }
         stage('Package') {
             steps {
-                bat 'mvn package -DskipTests'
+                bat 'mvn clean package -DskipTests'
             }
         }
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'target/gestion-location-vehicules-1.0.0.jar', fingerprint: true
             }
         }
         stage('Run (simulation de déploiement)') {
