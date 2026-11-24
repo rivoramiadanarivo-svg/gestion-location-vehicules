@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class LocationRegistre {
@@ -16,5 +17,11 @@ public class LocationRegistre {
 
     public List<Location> enCours() {
         return locations.stream().filter(l -> !l.isTerminee()).toList();
+    }
+    public Optional<Location> trouver(int index) {
+        if (index < 0 || index >= locations.size()) {
+            return Optional.empty();
+        }
+        return Optional.of(locations.get(index));
     }
 }

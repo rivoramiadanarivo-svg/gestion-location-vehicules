@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Locations - AutoLoc</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<aside th:replace="~{fragments :: sidebar('locations')}"></aside>
+
+<main class="contenu">
+    <h1>Locations</h1>
+    <p class="sous-titre">Créez et suivez vos locations</p>
+
+    <div class="alerte succes" th:if="${succes}" th:text="${succes}"></div>
+    <div class="alerte erreur" th:if="${erreur}" th:text="${erreur}"></div>
+
+    <section class="panneau">
+        <h2>Nouvelle location</h2>
+
+        <p class="vide" th:if="${#lists.isEmpty(disponibles)}">
+            Aucun véhicule disponible pour le moment.
+        </p>
+
+        <form method="post" th:action="@{/locations}" class="formulaire" th:unless="${#lists.isEmpty(disponibles)}">
+            <label>Nom
+                <input type="text" name="nom" placeholder="Rakoto" required>
+            </label>
+            <label>Prénom
+                <input type="text" name="prenom" placeholder="Jean" required>
+            </label>
+            <label>Téléphone
+                <input type="text" name="telephone" placeholder="034 00 000 00" required>
+            </label>
+            <label>Véhicule
+                <select name="immatriculation" required>
+                    <option th:each="v : ${disponibles}"
+                            th:value="${v.immatriculation}"
+                            th:text="${v.marque + ' - ' + v.prixParJour + ' / jour'}">Toyota</option>
+                </select>
+            </label>
+            <label>Début
+                <input type="date" name="debut" th:value="${aujourdhui}" required>
+            </label>
+            <label>Fin
+                <input type="date" name="fin" required>
+            </label>
+            <button type="submit" class="bouton">Créer la location</button>
+        </form>
+    </section>
+
+    <section class="panneau">
+        <h2>Historique (<span th:text="${#lists.size(locations)}">0</span>)</h2>
+
+        <p class="vide" th:if="${#lists.isEmpty(locations)}">Aucune location enregistrée.</p>
+
+        <div class="tableau-conteneur" th:unless="${#lists.isEmpty(locations)}">
+            <table class="tableau">
+                <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Véhicule</th>
+                    <th>Période</th>
+                    <th>Jours</th>
+                    <th>Prix</th>
+                    <th>Pénalité</th>
+                    <th>Total</th>
+                    <th>Statut</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="l : ${locations}">
+                    <td th:text="${l.client()}">Jean Rakoto</td>
+                    <td th:text="${l.vehicule()}">Toyota</td>
+                    <td>
+                        <span th:text="${#temporals.format(l.debut(), 'dd/MM/yyyy')}">01/12/2026</span>
+                        &rarr;
+                        <span th:text="${#temporals.format(l.fin(), 'dd/MM/yyyy')}">04/12/2026</span>
+                    </td>
+                    <td th:text="${l.nbJours()}">3</td>
+                    <td th:text="${#numbers.formatDecimal(l.prix(), 1, 2)}">240.00</td>
+                    <td th:text="${l.terminee()} ? ${#numbers.formatDecimal(l.penalite(), 1, 2)} : '-'">-</td>
+                    <td th:text="${l.terminee()} ? ${#numbers.formatDecimal(l.total(), 1, 2)} : '-'">-</td>
+                    <td>
+                        <span class="badge gris" th:if="${l.terminee()}">Terminée</span>
+                        <form method="post"
+                              th:unless="${l.terminee()}"
+                              th:action="@{/locations/{i}/terminer(i=${l.index()})}"
+                              class="formulaire-ligne">
+                            <input type="date" name="dateRetour" th:value="${aujourdhui}" required>
+                            <button type="submit" class="bouton petit">Terminer</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>
