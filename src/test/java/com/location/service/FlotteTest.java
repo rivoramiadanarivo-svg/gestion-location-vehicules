@@ -50,4 +50,13 @@ class FlotteTest {
     void ajouterNullLeveException() {
         assertThrows(IllegalArgumentException.class, () -> flotte.ajouter(null));
     }
+
+    @Test
+    void tousRetourneTousLesVehicules() {
+        flotte.ajouter(new Vehicule("AB-1", "Clio", 50));
+        Vehicule loue = new Vehicule("AB-2", "Polo", 60);
+        loue.setDisponible(false);
+        flotte.ajouter(loue);
+        assertEquals(2, flotte.tous().size());
+    }
 }

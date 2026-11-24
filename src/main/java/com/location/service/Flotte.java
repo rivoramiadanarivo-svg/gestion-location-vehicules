@@ -34,4 +34,7 @@ public class Flotte {
     public int taille() {
         return vehicules.size();
     }
+    public List<Vehicule> tous() {
+        return List.copyOf(vehicules);
+    }
 }

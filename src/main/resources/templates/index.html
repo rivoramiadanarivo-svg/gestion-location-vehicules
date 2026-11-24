@@ -7,14 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<aside class="sidebar">
-    <div class="logo">🚗 <span>AutoLoc</span></div>
-    <nav>
-        <a href="/" th:classappend="${page == 'accueil'} ? 'actif'">Tableau de bord</a>
-        <a href="/vehicules" th:classappend="${page == 'vehicules'} ? 'actif'">Véhicules</a>
-        <a href="/locations" th:classappend="${page == 'locations'} ? 'actif'">Locations</a>
-    </nav>
-</aside>
+<aside th:replace="~{fragments :: sidebar('accueil')}"></aside>
 
 <main class="contenu">
     <h1>Tableau de bord</h1>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" th:fragment="sidebar(page)">
+    <div class="logo">🚗 <span>AutoLoc</span></div>
+    <nav>
+        <a href="/" th:classappend="${page == 'accueil'} ? 'actif'">Tableau de bord</a>
+        <a href="/vehicules" th:classappend="${page == 'vehicules'} ? 'actif'">Véhicules</a>
+        <a href="/locations" th:classappend="${page == 'locations'} ? 'actif'">Locations</a>
+    </nav>
+</aside>
+</body>
+</html>
