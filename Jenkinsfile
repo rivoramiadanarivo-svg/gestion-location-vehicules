@@ -46,8 +46,11 @@ pipeline {
             }
         }
         stage('Run (simulation de déploiement)') {
+            options {
+                timeout(time: 2, unit: 'MINUTES')
+            }
             steps {
-                bat 'echo 0| java -jar target\\gestion-location-vehicules-1.0.0.jar'
+                bat 'java -jar target\\gestion-location-vehicules-1.0.0.jar --spring.main.web-application-type=none'
             }
         }
     }
