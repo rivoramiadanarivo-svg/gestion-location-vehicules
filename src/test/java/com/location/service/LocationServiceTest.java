@@ -118,4 +118,10 @@ class LocationServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.terminer(l, LocalDate.of(2026, 12, 5)));
     }
+
+    @Test
+    void remiseNonAppliqueeAvantSeptJours() {
+        Vehicule v = new Vehicule("A", "Clio", 100);
+        assertEquals(600, service.calculerPrix(v, 6), 0.01);
+    }
 }
