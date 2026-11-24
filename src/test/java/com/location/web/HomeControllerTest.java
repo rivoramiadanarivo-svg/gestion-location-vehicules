@@ -30,4 +30,11 @@ class HomeControllerTest {
         mockMvc.perform(get("/"))
                 .andExpect(content().string(containsString("Disponibles")));
     }
+
+    @Test
+    void accueilAfficheLeChiffreDAffairesEtLesRetards() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(content().string(containsString("Chiffre d'affaires")))
+                .andExpect(content().string(containsString("En retard")));
+    }
 }

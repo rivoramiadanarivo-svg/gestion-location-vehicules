@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page introuvable - AutoLoc</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<aside th:replace="~{fragments :: sidebar('')}"></aside>
+<main class="contenu">
+    <div class="erreur-page">
+        <div class="code">404</div>
+        <h1>Page introuvable</h1>
+        <p>La page que vous cherchez n'existe pas ou a été déplacée.</p>
+        <a href="/" class="bouton">Retour au tableau de bord</a>
+    </div>
+</main>
+</body>
+</html>

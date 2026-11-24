@@ -34,7 +34,21 @@
 
     <section class="panneau">
         <h2>Flotte (<span th:text="${#lists.size(vehicules)}">0</span>)</h2>
-        <div class="tableau-conteneur">
+
+        <form method="get" th:action="@{/vehicules}" class="filtres-form">
+            <input type="search" name="q" th:value="${q}" placeholder="Rechercher une marque ou une immatriculation">
+            <select name="statut">
+                <option value="tous" th:selected="${statut == 'tous'}">Tous les statuts</option>
+                <option value="disponible" th:selected="${statut == 'disponible'}">Disponibles</option>
+                <option value="loue" th:selected="${statut == 'loue'}">Loués</option>
+            </select>
+            <button type="submit" class="bouton petit">Filtrer</button>
+            <a th:href="@{/vehicules}" class="lien-reset">Réinitialiser</a>
+        </form>
+
+        <p class="vide" th:if="${#lists.isEmpty(vehicules)}">Aucun véhicule ne correspond à votre recherche.</p>
+
+        <div class="tableau-conteneur" th:unless="${#lists.isEmpty(vehicules)}">
             <table class="tableau">
                 <thead>
                 <tr>

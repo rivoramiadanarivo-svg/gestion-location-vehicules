@@ -13,5 +13,6 @@ public record LocationVue(
         boolean terminee,
         int joursRetard,
         double penalite,
-        double total) {
+        double total,
+        boolean enRetard) {
 }

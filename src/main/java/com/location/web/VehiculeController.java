@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
 
 @Controller
 @RequestMapping("/vehicules")
@@ -21,9 +22,26 @@ public class VehiculeController {
     }
 
     @GetMapping
-    public String liste(Model model) {
+    public String liste(@RequestParam(defaultValue = "") String q,
+                        @RequestParam(defaultValue = "tous") String statut,
+                        Model model) {
+        String recherche = q.trim().toLowerCase();
+
+        List<Vehicule> resultat = flotte.tous().stream()
+                .filter(v -> recherche.isEmpty()
+                        || v.getMarque().toLowerCase().contains(recherche)
+                        || v.getImmatriculation().toLowerCase().contains(recherche))
+                .filter(v -> switch (statut) {
+                    case "disponible" -> v.isDisponible();
+                    case "loue" -> !v.isDisponible();
+                    default -> true;
+                })
+                .toList();
+
         model.addAttribute("page", "vehicules");
-        model.addAttribute("vehicules", flotte.tous());
+        model.addAttribute("vehicules", resultat);
+        model.addAttribute("q", q);
+        model.addAttribute("statut", statut);
         return "vehicules";
     }
 

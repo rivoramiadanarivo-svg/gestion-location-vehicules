@@ -60,4 +60,18 @@ class VehiculeControllerTest {
                         .param("prixParJour", "-10"))
                 .andExpect(flash().attributeExists("erreur"));
     }
+
+    @Test
+    void rechercheParMarqueFiltreLaListe() throws Exception {
+        mockMvc.perform(get("/vehicules").param("q", "corolla"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Toyota Corolla")))
+                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("Peugeot 208"))));
+    }
+
+    @Test
+    void rechercheSansResultatAfficheUnMessage() throws Exception {
+        mockMvc.perform(get("/vehicules").param("q", "introuvable123"))
+                .andExpect(content().string(containsString("Aucun véhicule ne correspond")));
+    }
 }

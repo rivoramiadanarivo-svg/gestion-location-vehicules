@@ -34,10 +34,19 @@ public class LocationController {
     }
 
     @GetMapping
-    public String liste(Model model) {
+    public String liste(@RequestParam(defaultValue = "tous") String statut, Model model) {
+        List<LocationVue> filtrees = vues().stream()
+                .filter(v -> switch (statut) {
+                    case "en_cours" -> !v.terminee();
+                    case "terminees" -> v.terminee();
+                    default -> true;
+                })
+                .toList();
+
         model.addAttribute("page", "locations");
         model.addAttribute("disponibles", flotte.disponibles());
-        model.addAttribute("locations", vues());
+        model.addAttribute("locations", filtrees);
+        model.addAttribute("statut", statut);
         model.addAttribute("aujourdhui", LocalDate.now().toString());
         return "locations";
     }
@@ -89,6 +98,7 @@ public class LocationController {
         List<LocationVue> vues = new ArrayList<>();
         for (int i = 0; i < toutes.size(); i++) {
             Location l = toutes.get(i);
+            boolean enRetard = !l.isTerminee() && l.getDateFin().isBefore(LocalDate.now());
             vues.add(new LocationVue(i,
                     l.getClient().getNomComplet(),
                     l.getVehicule().getMarque(),
@@ -99,7 +109,8 @@ public class LocationController {
                     l.isTerminee(),
                     l.getJoursDeRetard(),
                     service.calculerPenalite(l),
-                    service.calculerTotal(l)));
+                    service.calculerTotal(l),
+                    enRetard));
         }
         return vues;
     }

@@ -53,7 +53,13 @@
     <section class="panneau">
         <h2>Historique (<span th:text="${#lists.size(locations)}">0</span>)</h2>
 
-        <p class="vide" th:if="${#lists.isEmpty(locations)}">Aucune location enregistrée.</p>
+        <div class="filtres">
+            <a th:href="@{/locations}" th:classappend="${statut == 'tous'} ? 'actif'">Toutes</a>
+            <a th:href="@{/locations(statut='en_cours')}" th:classappend="${statut == 'en_cours'} ? 'actif'">En cours</a>
+            <a th:href="@{/locations(statut='terminees')}" th:classappend="${statut == 'terminees'} ? 'actif'">Terminées</a>
+        </div>
+
+        <p class="vide" th:if="${#lists.isEmpty(locations)}">Aucune location dans cette catégorie.</p>
 
         <div class="tableau-conteneur" th:unless="${#lists.isEmpty(locations)}">
             <table class="tableau">
@@ -70,7 +76,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="l : ${locations}">
+                <tr th:each="l : ${locations}" th:classappend="${l.enRetard()} ? 'ligne-retard'">
                     <td th:text="${l.client()}">Jean Rakoto</td>
                     <td th:text="${l.vehicule()}">Toyota</td>
                     <td>
@@ -84,10 +90,12 @@
                     <td th:text="${l.terminee()} ? ${#numbers.formatDecimal(l.total(), 1, 2)} : '-'">-</td>
                     <td>
                         <span class="badge gris" th:if="${l.terminee()}">Terminée</span>
+                        <span class="badge rouge" th:if="${l.enRetard()}">En retard</span>
                         <form method="post"
                               th:unless="${l.terminee()}"
                               th:action="@{/locations/{i}/terminer(i=${l.index()})}"
-                              class="formulaire-ligne">
+                              class="formulaire-ligne"
+                              onsubmit="return confirm('Confirmer la clôture de cette location ?');">
                             <input type="date" name="dateRetour" th:value="${aujourdhui}" required>
                             <button type="submit" class="bouton petit">Terminer</button>
                         </form>

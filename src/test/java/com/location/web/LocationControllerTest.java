@@ -85,4 +85,25 @@ class LocationControllerTest {
                         .param("dateRetour", "2026-12-06"))
                 .andExpect(flash().attributeExists("erreur"));
     }
+
+    @Test
+    void filtreTermineesRepondCorrectement() throws Exception {
+        mockMvc.perform(get("/locations").param("statut", "terminees"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Historique")));
+    }
+
+    @Test
+    void uneLocationDepasseeEstSignaleeEnRetard() throws Exception {
+        mockMvc.perform(post("/locations")
+                .param("nom", "Randria")
+                .param("prenom", "Luc")
+                .param("telephone", "0343333333")
+                .param("immatriculation", "MN-012-OP")
+                .param("debut", "2020-01-01")
+                .param("fin", "2020-01-05"));
+
+        mockMvc.perform(get("/locations"))
+                .andExpect(content().string(containsString("En retard")));
+    }
 }

@@ -26,6 +26,43 @@
             <span class="carte-label">Locations en cours</span>
             <span class="carte-valeur" th:text="${nbEnCours}">0</span>
         </div>
+        <div class="carte rouge">
+            <span class="carte-label">En retard</span>
+            <span class="carte-valeur" th:text="${nbEnRetard}">0</span>
+        </div>
+        <div class="carte violet">
+            <span class="carte-label">Chiffre d'affaires</span>
+            <span class="carte-valeur" th:text="${#numbers.formatDecimal(chiffreAffaires, 1, 2)}">0.00</span>
+        </div>
+    </section>
+
+    <section class="panneau">
+        <h2>Dernières locations</h2>
+        <p class="vide" th:if="${#lists.isEmpty(recentes)}">
+            Aucune location pour le moment. <a href="/locations">Créer la première</a>.
+        </p>
+        <div class="tableau-conteneur" th:unless="${#lists.isEmpty(recentes)}">
+            <table class="tableau">
+                <thead>
+                <tr><th>Client</th><th>Véhicule</th><th>Période</th><th>Statut</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="l : ${recentes}">
+                    <td th:text="${l.client.nomComplet}">Jean Rakoto</td>
+                    <td th:text="${l.vehicule.marque}">Toyota</td>
+                    <td>
+                        <span th:text="${#temporals.format(l.dateDebut, 'dd/MM/yyyy')}">01/12/2026</span>
+                        &rarr;
+                        <span th:text="${#temporals.format(l.dateFin, 'dd/MM/yyyy')}">04/12/2026</span>
+                    </td>
+                    <td>
+                        <span class="badge gris" th:if="${l.terminee}">Terminée</span>
+                        <span class="badge orange" th:unless="${l.terminee}">En cours</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 </main>
 </body>
